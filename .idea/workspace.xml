@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c84990ff-819d-4c41-a2e9-a5de243dd2fe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_spark_spark_sql_kafka_0_10_2_11_2_4_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/virtualpairprogrammers/streaming/ViewingFiguresStructuredVersion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learningSpark.iml" beforeDir="false" afterPath="$PROJECT_DIR$/learningSpark.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/virtualpairprogrammers/streaming/ViewingFiguresStructuredVersion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/virtualpairprogrammers/streaming/ViewingFiguresStructuredVersion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/virtualpairprogrammers/streaming/ViewingFiguresStructuredVersion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/virtualpairprogrammers/streaming/ViewingFiguresStructuredVersion.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ViewingFiguresDStreamVersion">
+  <component name="RunManager" selected="Application.ViewingFiguresStructuredVersion">
     <configuration name="LogStreamAnalysis" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.virtualpairprogrammers.streaming.LogStreamAnalysis" />
       <module name="learningSpark" />
@@ -102,8 +100,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ViewingFiguresDStreamVersion" />
         <item itemvalue="Application.ViewingFiguresStructuredVersion" />
+        <item itemvalue="Application.ViewingFiguresDStreamVersion" />
         <item itemvalue="Application.LogStreamAnalysis" />
         <item itemvalue="Application.LoggingServer" />
       </list>
@@ -120,7 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1578068471898</updated>
       <workItem from="1578068474246" duration="4533000" />
-      <workItem from="1578085054552" duration="15210000" />
+      <workItem from="1578085054552" duration="17541000" />
     </task>
     <servers />
   </component>

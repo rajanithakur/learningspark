@@ -41,6 +41,15 @@ public class ViewingFiguresStructuredVersion {
                 .outputMode(OutputMode.Complete()) // when sql was without chunk of 5 sec, OutputMode.Append()
                 .start();
         //equivalent to await termination previously
+        /*
+            OutputMode.Complete() ... all the results of the sql query should show up as output and written to table (not allowed without aggregation..
+            order by in sql mode can happen complete mode only)
+             Dataset<Row> results = session.sql("select cast (value as string) as course_name, sum(5) as sec_watched from viewing_figures group by course_name ordery by sec_watched desc");
+
+             OutputMode.update().... update any rows of the table that might have changed since the last batch ... see same output in evernote
+             ( order by above sql cannot happen with update ....error: sorting is not supported unless agreggated by output.complete mode())
+             OutputMode.append().... only output any new rows to output table
+         */
 
         /* output with OutputMode.Complete()
             -------------------------------------------
@@ -88,6 +97,49 @@ Batch: 2
 IMPORTANT THING TO NOTE : IN STRUCTURED STREAMING THERE IS NO CONCEPT OF WINDOWS, IT TREATS AS IF THERE AN INFINITE TABLE AND DATA IS APPENDED TO IT AND AGGREGATION IS PERFORMED ON THE BATCHES
 WITHOUT WORRYING ABOUT WINDOWS AS IN DSTREAMS, IF YOU SEE ABOVE OUTPUT DATA IS INCREASING/  AGGREGATED ACROSS BATCHES
          */
+
+        /* DEMO WINDOWING **********************
+
+        //Timestamp  below is event generation timestamp and not the timestamp when the records  were processed
+        Dataset<Row> results = session.sql("select window,  cast (value as string) as course_name, sum(5) as sec_watched from viewing_figures group by window(timestamp, '2 minutes'), course_name");
+        StreamingQuery console = results.writeStream()
+        .format("console")
+        .outputMode(OutputMode.Update()) // when sql was without chunk of 5 sec, OutputMode.Append(
+                .option("truncate", false) // so that 'window' column is not truncated
+                .option("numRows", 50) // so that I see more rows  in output from batch processed, from default output row size of 20
+                .start();
+
+                 OUTPUT
+                -------------------------------------------
+Batch: 7
+-------------------------------------------
++------------------------------------------+---------------------------------------------+-----------+
+|window                                    |course_name                                  |sec_watched|
++------------------------------------------+---------------------------------------------+-----------+
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Hadoop for Java Developers                   |15         |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Test Driven Development                      |230        |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Test Driven Development                      |10         |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Hadoop for Java Developers                   |760        |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Spring Framework Fundamentals                |900        |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Groovy Programming                           |530        |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Spring Framework Fundamentals                |20         |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Java Web Development Second Edition: Module 2|5          |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Java Web Development Second Edition: Module 1|1060       |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Hibernate and JPA                            |1315       |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Groovy Programming                           |5          |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Java Fundamentals                            |65         |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Java Fundamentals                            |1940       |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Hibernate and JPA                            |25         |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Java Web Development Second Edition: Module 2|120        |
+|[2020-01-10 09:18:00, 2020-01-10 09:20:00]|Java Build Tools                             |60         |
+|[2020-01-10 09:20:00, 2020-01-10 09:22:00]|Java Web Development Second Edition: Module 1|50         |
+
+                'window' values above is the timestamp put on that event by kafka when it was received by kafka
+                There can be 2 rows  of same course... just coz their windows are different
+                Spark Structured Streaming is so powerful, if the report for rows is  generated based on event generation timestamp and  events arrived late
+                due to delays on kafka... spark goes back and updates the record  event though report generation was complete for that window
+                Handling LATE data and watermarking in Ache online doc... .withWaterMark
+                */
         console.awaitTermination();
     }
 }
